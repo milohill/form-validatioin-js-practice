@@ -15,19 +15,57 @@
       * {
         box-sizing: border-box;
       }
+
+      form {
+        margin: 0 auto;
+
+        width: 300px;
+        height: 500px;
+
+        display: flex;
+        flex-direction: column;
+      }
+
+      .error {
+        background-color: red;
+        color: white;
+        white-space: pre-wrap;
+      }
     </style>
   </head>
-
   <body>
     <form>
       <label for="mail"
         >I would like you to provide me with an e-mail address:</label
       >
-      <input type="email" id="mail" name="mail" />
+      <input type="email" id="mail" name="mail" minlength="10" required />
+      <span class="error" aria-live="polite"></span>
       <button>Submit</button>
     </form>
   </body>
   <script>
     const email = document.getElementById('mail');
+    const emailError = document.querySelector('.error');
+
+    email.addEventListener('input', function (e) {
+      const isTooShort = this.validity.tooShort;
+      const isFilled = this.validity.valueMissing;
+      const isTheRightType = this.validity.typeMismatch;
+      let errorMessage = '';
+
+      if (isFilled) {
+        errorMessage += 'This field is required to be filled\n';
+      }
+
+      if (isTooShort) {
+        errorMessage += 'The text is too short\n';
+      }
+
+      if (isTheRightType) {
+        errorMessage += 'The type is not email\n';
+      }
+
+      emailError.textContent = errorMessage;
+    });
   </script>
 </html>
